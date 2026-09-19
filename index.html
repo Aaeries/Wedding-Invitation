@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monica &amp; Larry — Wedding Invitation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- =========================================================
+       INTRO: Envelope → Invite card → Photo + Music → Details
+       ========================================================= -->
+  <div id="intro" class="intro" data-step="envelope">
+
+    <div class="intro__atmosphere intro__atmosphere--beige" aria-hidden="true"></div>
+
+    <!-- STEP 1: Closed envelope -->
+    <section class="intro-step intro-step--envelope" id="step-envelope" aria-label="Open invitation">
+      <h1 class="envelope-hero-names">Monica <span>&amp;</span> Larry</h1>
+      <p class="envelope-hero-date">10.20.2026</p>
+
+      <button type="button" class="envelope" id="btn-open-envelope" aria-label="Click the seal to open the envelope">
+        <span class="envelope__card" aria-hidden="true">
+          <span class="envelope__card-inner envelope__card-inner--blank"></span>
+        </span>
+        <span class="envelope__body"><span class="envelope__crease"></span></span>
+        <span class="envelope__flap" id="envelope-flap">
+          <span class="envelope__flap-face"></span>
+          <span class="envelope__flap-back"></span>
+        </span>
+        <img class="wax-seal-img" src="assets/wax-seal.png" alt="" width="96" height="96" />
+        <img class="envelope-floral envelope-floral--left" src="assets/floral-tl.png" alt="" />
+        <img class="envelope-floral envelope-floral--right" src="assets/floral-br.png" alt="" />
+      </button>
+
+      <p class="intro-hint pulse" id="open-hint">Click the seal to open the envelope</p>
+    </section>
+
+    <!-- STEP 2: Invite card -->
+    <section class="intro-step intro-step--invite" id="step-invite" hidden aria-label="You're invited">
+      <article class="invite-card-screen">
+        <p class="invite-card-screen__kicker">Together with their families</p>
+        <h2 class="invite-card-screen__title">You're Invited</h2>
+        <div class="invite-card-screen__rule" aria-hidden="true"></div>
+        <p class="invite-card-screen__names">Monica <span>&amp;</span> Larry</p>
+        <p class="invite-card-screen__date">October 20, 2026</p>
+        <button type="button" class="btn-text" id="btn-to-photo">Continue →</button>
+      </article>
+    </section>
+
+    <!-- STEP 3: Spotify-style music player -->
+    <section class="intro-step intro-step--listen" id="step-listen" hidden aria-label="Our song">
+      <div class="spotify-player" id="mini-player">
+        <div class="spotify-player__glow" aria-hidden="true"></div>
+
+        <figure class="spotify-cover">
+          <img src="assets/music-cover.png" alt="Monica and Larry — album cover" />
+        </figure>
+
+        <div class="spotify-meta">
+          <h2 class="spotify-title">Palagi</h2>
+          <p class="spotify-artist">TJ Monterde</p>
+        </div>
+
+        <div class="spotify-seek">
+          <div class="mini-player__bar" id="seek-bar" role="slider" aria-label="Song progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+            <span class="mini-player__progress" id="seek-progress"></span>
+            <span class="mini-player__knob" id="seek-knob"></span>
+          </div>
+          <div class="spotify-times">
+            <span id="time-current">0:00</span>
+            <span id="time-total">0:00</span>
+          </div>
+        </div>
+
+        <div class="spotify-controls">
+          <button type="button" class="spot-btn" id="btn-shuffle" aria-label="Shuffle" title="Shuffle">⇄</button>
+          <button type="button" class="spot-btn" id="btn-rewind" aria-label="Previous">⏮</button>
+          <button type="button" class="spot-play" id="btn-play" aria-label="Play song and open invitation" aria-pressed="false">
+            <span id="play-icon">▶</span>
+          </button>
+          <button type="button" class="spot-btn" id="btn-forward" aria-label="Next">⏭</button>
+          <button type="button" class="spot-btn" id="btn-repeat" aria-label="Repeat" title="Repeat">⟳</button>
+        </div>
+
+        <p class="spotify-hint">Press play to open the invitation</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Persistent floating music control (after entering) -->
+  <aside class="music-fab" id="music-fab" hidden>
+    <button type="button" class="music-fab__btn" id="btn-play-fab" aria-label="Play or pause Palagi">
+      <span class="music-fab__cover" aria-hidden="true">
+        <img src="assets/music-cover.png" alt="" />
+      </span>
+      <span class="music-fab__text">
+        <strong>Palagi</strong>
+        <span id="fab-state">Play</span>
+      </span>
+    </button>
+  </aside>
+
+  <!-- Audio: prefers assets/palagi.mp3, falls back to placeholder wav via script.js -->
+  <audio id="wedding-audio" preload="auto" loop playsinline></audio>
+
+  <!-- =========================================================
+       MAIN WEDDING WEBSITE
+       ========================================================= -->
+  <div id="main-site" class="main-site" hidden>
+
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="logo" href="#details">Monica <span>&amp;</span> Larry</a>
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav" id="site-nav">
+          <a href="#details">Details</a>
+          <a href="#hero">The Wedding</a>
+          <a href="#story">Story</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#rsvp">RSVP</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- DETAILS — sage stationery -->
+      <section class="details section" id="details">
+        <div class="collage reveal-on-scroll">
+
+          <div class="collage__mid">
+            <article class="collage__invite">
+              <p class="collage__invite-kicker">Please join us for the</p>
+              <p class="collage__invite-wedding">wedding of</p>
+              <h2 class="collage__invite-names">Monica <em>&amp;</em> Larry</h2>
+            </article>
+
+            <article class="collage__info">
+              <p class="collage__info-day">20</p>
+              <p class="collage__info-month">October 2026</p>
+              <div class="collage__info-rule"></div>
+              <p class="collage__info-time">4:00 PM</p>
+              <p class="collage__info-place">
+                Seaside Garden Pavilion<br />
+                Coral Bay
+              </p>
+              <p class="collage__info-reception">
+                Reception · The Olive Grove Hall
+              </p>
+            </article>
+
+            <img class="collage__floral" src="assets/floral-accent.png" alt="" />
+          </div>
+
+          <div class="collage__actions">
+            <a class="collage__rsvp" href="#rsvp">
+              <span class="collage__rsvp-text">Kindly RSVP</span>
+              <span class="collage__rsvp-seal">Here</span>
+            </a>
+            <a class="collage__details-btn" href="#hero">
+              <span class="collage__details-sub">Continue to</span>
+              <span class="collage__details-main">Our Day</span>
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- HERO -->
+      <section class="hero section" id="hero">
+        <div class="hero__text reveal-on-scroll">
+          <p class="script-label">The wedding of</p>
+          <h1>Monica <span class="amp">&amp;</span> Larry</h1>
+          <p class="hero__date">October 20, 2026</p>
+          <p class="hero__message">
+            With joyful hearts, we invite you to celebrate our love
+            and witness the beginning of forever.
+          </p>
+        </div>
+        <figure class="hero__photo photo-frame reveal-on-scroll">
+          <img
+            src="assets/couple-4.jpg"
+            alt="Monica and Larry by the sea"
+            class="photo-natural"
+          />
+        </figure>
+      </section>
+
+      <!-- OUR STORY -->
+      <section class="story section" id="story">
+        <div class="section-head reveal-on-scroll">
+          <p class="script-label">Our beginning</p>
+          <h2>Our Story</h2>
+          <div class="ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+        </div>
+
+        <div class="story__grid">
+          <figure class="photo-frame story__photo reveal-on-scroll">
+            <img src="assets/couple-2.jpg" alt="Monica and Larry walking along the shore" class="photo-natural" />
+          </figure>
+          <div class="story__copy reveal-on-scroll">
+            <p class="lead">
+              What started as shared laughter grew into a love that feels like home —
+              steady, kind, and beautifully ordinary in all the best ways.
+            </p>
+            <p>
+              Through quiet mornings and sunlit adventures by the sea, Monica and Larry
+              chose each other again and again. Now, surrounded by the people who shaped
+              their lives, they begin the next chapter as one.
+            </p>
+            <p class="story__sign">With love, Monica &amp; Larry</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- DRESS CODE -->
+      <section class="dress section" id="dress">
+        <div class="dress__card reveal-on-scroll">
+          <p class="script-label script-label--light">Attire</p>
+          <h2>Dress Code</h2>
+          <p class="dress__title">Garden Formal</p>
+          <p>Soft neutrals, sage, cream, and warm earth tones. Breathable fabrics welcome. Please reserve white for the couple.</p>
+          <div class="swatches" aria-hidden="true">
+            <i style="--c:#8fa88a"></i>
+            <i style="--c:#c4b49a"></i>
+            <i style="--c:#f0ebe3"></i>
+            <i style="--c:#6b7f5e"></i>
+            <i style="--c:#b8956a"></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALLERY — scrollable art gallery -->
+      <section class="gallery section gallery--hall" id="gallery">
+        <div class="section-head reveal-on-scroll">
+          <p class="script-label">Exhibition</p>
+          <h2>Photo Gallery</h2>
+          <div class="ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+          <p class="gallery__hint">Swipe or use the arrows</p>
+        </div>
+
+        <div class="gallery-stage reveal-on-scroll">
+          <button type="button" class="gallery-nav gallery-nav--prev" id="gallery-prev" aria-label="Previous photo">‹</button>
+
+          <div class="art-hall" id="art-hall" tabindex="0" aria-label="Scrollable photo gallery">
+            <figure class="art-frame">
+              <button type="button" class="gallery__btn" data-full="assets/couple-1.jpg" aria-label="View larger">
+                <img src="assets/couple-1.jpg" alt="Monica and Larry embracing" />
+              </button>
+              <figcaption>I</figcaption>
+            </figure>
+            <figure class="art-frame">
+              <button type="button" class="gallery__btn" data-full="assets/couple-2.jpg" aria-label="View larger">
+                <img src="assets/couple-2.jpg" alt="Walking together on the beach" />
+              </button>
+              <figcaption>II</figcaption>
+            </figure>
+            <figure class="art-frame">
+              <button type="button" class="gallery__btn" data-full="assets/couple-3.jpg" aria-label="View larger">
+                <img src="assets/couple-3.jpg" alt="Hand in hand toward the ocean" />
+              </button>
+              <figcaption>III</figcaption>
+            </figure>
+            <figure class="art-frame">
+              <button type="button" class="gallery__btn" data-full="assets/couple-4.jpg" aria-label="View larger">
+                <img src="assets/couple-4.jpg" alt="A quiet moment by the water" />
+              </button>
+              <figcaption>IV</figcaption>
+            </figure>
+          </div>
+
+          <button type="button" class="gallery-nav gallery-nav--next" id="gallery-next" aria-label="Next photo">›</button>
+        </div>
+
+        <div class="gallery-dots" id="gallery-dots" role="tablist" aria-label="Gallery photos"></div>
+      </section>
+
+      <!-- RSVP -->
+      <section class="rsvp section" id="rsvp">
+        <div class="rsvp__card reveal-on-scroll">
+          <p class="script-label">Kindly reply</p>
+          <h2>RSVP</h2>
+          <p class="rsvp__deadline">Please respond by <strong>October 1, 2026</strong></p>
+          <form class="rsvp-form" id="rsvp-form" action="#" method="get">
+            <label>Full Name<input type="text" name="name" required placeholder="Your full name" /></label>
+            <label>Email<input type="email" name="email" required placeholder="you@email.com" /></label>
+            <label>Phone<input type="tel" name="phone" placeholder="+63…" /></label>
+            <fieldset>
+              <legend>Will you attend?</legend>
+              <label class="choice"><input type="radio" name="attend" value="yes" checked /> Joyfully accepts</label>
+              <label class="choice"><input type="radio" name="attend" value="no" /> Regretfully declines</label>
+            </fieldset>
+            <label>Number of Guests<input type="number" name="guests" min="1" max="10" value="1" /></label>
+            <label>Message<textarea name="message" rows="3" placeholder="A note for Monica &amp; Larry…"></textarea></label>
+            <button type="submit" class="btn-solid">Send RSVP</button>
+            <p class="form-note" id="rsvp-note">This form is visual — connect a backend later if you wish.</p>
+          </form>
+        </div>
+      </section>
+
+      <!-- CLOSING -->
+      <section class="closing section" id="closing">
+        <figure class="photo-frame closing__photo reveal-on-scroll">
+          <img src="assets/couple-1.jpg" alt="Monica and Larry" class="photo-natural" />
+        </figure>
+        <div class="closing__copy reveal-on-scroll">
+          <p class="script-label">With gratitude</p>
+          <h2>Thank You</h2>
+          <p>Your presence, near or far, means the world to us. We cannot wait to celebrate with you.</p>
+          <p class="closing__names">Monica &amp; Larry</p>
+          <p class="closing__date">October 20, 2026</p>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <p>Monica &amp; Larry · 20.10.2026</p>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="lightbox__close" id="lightbox-close" aria-label="Close">×</button>
+    <img src="" alt="Enlarged couple photo" id="lightbox-img" class="photo-natural" />
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
