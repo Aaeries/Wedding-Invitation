@@ -1446,10 +1446,25 @@ p { margin: 0 0 1rem; }
 }
 
 .collage__info-reception {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   font-size: 0.75rem;
   color: #6a7366;
   margin: 0;
-  line-height: 1.35;
+  line-height: 1.55;
+}
+
+.collage__location-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #b8956a;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .collage__actions {
