@@ -15,6 +15,7 @@
   const stepListen = document.getElementById("step-listen");
 
   const envelopeBtn = document.getElementById("btn-open-envelope");
+  const envelopeFlap = document.getElementById("envelope-flap");
   const btnToPhoto = document.getElementById("btn-to-photo");
   const btnEnter = document.getElementById("btn-enter");
   const playIcon = document.getElementById("play-icon");
@@ -33,8 +34,6 @@
 
   const navToggle = document.getElementById("nav-toggle");
   const siteNav = document.getElementById("site-nav");
-  const rsvpForm = document.getElementById("rsvp-form");
-  const rsvpNote = document.getElementById("rsvp-note");
 
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = document.getElementById("lightbox-img");
@@ -67,7 +66,28 @@
     stepEnvelope.hidden = step !== "envelope";
     stepInvite.hidden = step !== "invite";
     stepListen.hidden = step !== "listen";
+    stepEnvelope.classList.remove("is-leaving");
+    stepInvite.classList.remove("is-preparing", "is-popping");
     intro.dataset.step = step;
+  }
+
+  function popInvitationCard() {
+    stepInvite.hidden = false;
+    stepInvite.classList.add("is-preparing");
+
+    // Commit the hidden starting state before the pop animation begins.
+    void stepInvite.offsetWidth;
+
+    window.requestAnimationFrame(function () {
+      intro.dataset.step = "invite";
+      stepEnvelope.classList.add("is-leaving");
+      stepInvite.classList.remove("is-preparing");
+      stepInvite.classList.add("is-popping");
+    });
+
+    window.setTimeout(function () {
+      stepEnvelope.hidden = true;
+    }, 760);
   }
 
   function setPlayingUI(playing) {
@@ -157,7 +177,8 @@
     window.scrollTo(0, 0);
     window.setTimeout(function () {
       observeReveals();
-      updateActiveFrame();
+      if (artFrames && artFrames.length > 1) scrollToFrame(1);
+      else updateActiveFrame();
     }, 120);
   }
 
@@ -174,7 +195,7 @@
   }
 
   /* ---------- Envelope → Invite card ---------- */
-  envelopeBtn.addEventListener("click", async function () {
+  envelopeBtn.addEventListener("click", function () {
     if (envelopeBtn.classList.contains("is-open")) return;
 
     intro.dataset.step = "opening";
@@ -183,11 +204,24 @@
     const hint = document.getElementById("open-hint");
     if (hint) hint.hidden = true;
 
-    await unlockAudio();
+    unlockAudio();
 
-    window.setTimeout(function () {
-      showStep("invite");
-    }, 1500);
+    let openingFinished = false;
+    const finishOpening = function () {
+      if (openingFinished) return;
+      openingFinished = true;
+      popInvitationCard();
+    };
+
+    if (envelopeFlap) {
+      envelopeFlap.addEventListener("transitionend", function onFlapOpened(e) {
+        if (e.target !== envelopeFlap || e.propertyName !== "transform") return;
+        envelopeFlap.removeEventListener("transitionend", onFlapOpened);
+        window.setTimeout(finishOpening, 180);
+      });
+    }
+
+    window.setTimeout(finishOpening, 2100);
   });
 
   /* ---------- Invite → Photo + Music ---------- */
@@ -268,14 +302,6 @@
     });
   });
 
-  /* ---------- RSVP ---------- */
-  rsvpForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    rsvpNote.textContent =
-      "Salamat! Natanggap namin ang RSVP ninyo (demo — walang backend pa).";
-    rsvpForm.reset();
-  });
-
   /* ---------- Lightbox ---------- */
   document.querySelectorAll(".gallery__btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -353,8 +379,12 @@
     });
 
     activeFrameIndex = closestIndex;
-    artFrames.forEach(function (frame) {
+    artFrames.forEach(function (frame, i) {
       frame.classList.toggle("is-active", frame === closest);
+      frame.classList.toggle("is-prev", i === closestIndex - 1);
+      frame.classList.toggle("is-next", i === closestIndex + 1);
+      frame.classList.toggle("is-far", Math.abs(i - closestIndex) > 1);
+      frame.style.setProperty("--gallery-distance", String(Math.abs(i - closestIndex)));
     });
 
     if (galleryDots) {
